@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
   public void CompleteLevel()
   {
-    Debug.Log("LEVEL 1!");
+    Debug.Log("LEVEL " + SceneManager.GetActiveScene().buildIndex + " !");
     completeLevelUI.SetActive(true);
   }
 }
