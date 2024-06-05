@@ -6,6 +6,9 @@ public class PlayerMovement : MonoBehaviour
 
   public float forwarForce = 2000f;
   public float sidewaysForce = 500f;
+  public float butDeduct = 200f;
+
+  public int leftOrRight = 0;
 
   // Start is called before the first frame update
   void Start()
@@ -29,9 +32,34 @@ public class PlayerMovement : MonoBehaviour
       rb.AddForce(-sidewaysForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
     }
 
+    if (leftOrRight > 0)
+    {
+      rb.AddForce((sidewaysForce - butDeduct) * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+    }
+
+    if (leftOrRight < 0)
+    {
+      rb.AddForce(-(sidewaysForce - butDeduct) * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+    }
+
     if (rb.position.y < -1f)
     {
       FindObjectOfType<GameManager>().EndGame();
     }
+  }
+
+  public void LeftMove()
+  {
+    leftOrRight = 1;
+  }
+
+  public void RightMove()
+  {
+    leftOrRight = -1;
+  }
+
+  public void LeftOrRightMoveUp()
+  {
+    leftOrRight = 0;
   }
 }
