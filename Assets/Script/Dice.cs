@@ -9,7 +9,13 @@ using Random = UnityEngine.Random;
 public class Dice : MonoBehaviour
 {
   private const string HIGH_SCORE = "HighScore";
+
+  [SerializeField]
+  private int testTmp = 1;
+  [Header("分数")]
   public Text score;
+  [Space]
+  [HideInInspector]
   public Text highScore;
 
   private void Start()
@@ -23,13 +29,17 @@ public class Dice : MonoBehaviour
     int number = Random.Range(1, 7);
     score.text = number.ToString();
 
+    #region 测试代码区域宏
+
     if (number > PlayerPrefs.GetInt(HIGH_SCORE, 0))
     {
       //存储高分数据
-      PlayerPrefs.SetInt(HIGH_SCORE,number);
+      PlayerPrefs.SetInt(HIGH_SCORE, number);
       //显示高分数据
       highScore.text = number.ToString();
     }
+
+    #endregion
   }
 
   public void Reset()
