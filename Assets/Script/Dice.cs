@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -20,6 +21,8 @@ public class Dice : MonoBehaviour
 
   private void Start()
   {
+    // Unity 主线程Id = 1 -> Thread Id:1
+    Debug.LogFormat("Thread Id:{0}",Thread.CurrentThread.ManagedThreadId);
     //启动时获取保存的数据
     highScore.text = PlayerPrefs.GetInt(HIGH_SCORE, 0).ToString();
   }

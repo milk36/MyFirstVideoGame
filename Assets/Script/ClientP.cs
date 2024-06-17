@@ -39,7 +39,7 @@ public class ClientP : MonoBehaviour
   //服务端最新状态帧数据 权威状态
   private StatePayload latestServerState;
 
-  //客户端最后处理的帧数据
+  //客户端最后处理的帧数据(和解帧)
   private StatePayload lastProcessedState;
   private float horizontalInput;
 
@@ -117,6 +117,7 @@ public class ClientP : MonoBehaviour
       //如果最新服务端状态帧数据不为空 && 最后处理状态帧为空
       //或者最新服务端状态帧数据不等于最后处理状态帧
       //执行回滚逻辑
+      //TODO 这里每次都会执行
       HandleServerReconciliation();
     }
 
@@ -153,17 +154,22 @@ public class ClientP : MonoBehaviour
   }
 
   /// <summary>
-  /// 回滚逻辑
+  /// 每帧执行的协调逻辑
+  /// 默认情况下 服务端的最新状态会落后与客户端的帧数
+  /// 也就是说服务端的最新状态是客户端之前某一帧的状态,
+  /// 所以需要先获取客户端的 stateBuffer 缓存与其比对
   /// </summary>
   private void HandleServerReconciliation()
   {
     lastProcessedState = latestServerState;
+    // Debug.Log("比较服务端最新状态的偏差...");
 
     int serverStateBufferIndex = latestServerState.tick % BUFFER_SIZE;
     //获取偏差值
     float positionError = Vector3.Distance(latestServerState.position,
       _stateBuffer[serverStateBufferIndex].position);
 
+    //TODO 只有偏差比较大,才会执行里面的逻辑
     if (positionError > 0.001f)
     {
       Debug.Log("have to reconcile bro");
